@@ -19,9 +19,9 @@
 - [x] Commit after completing all iterations.
 
 ## 4. FINALIZE PROJECT IDEA `.cursor/proposal.md`
-- [ ] Draft a comprehensive project proposal following hackathon requirements.
-- [ ] Include solution name, features, tech stack, project structure, flow diagrams, and future improvements.
-- [ ] Commit the proposal.
+- [x] Draft a comprehensive project proposal following hackathon requirements.
+- [x] Include solution name, features, tech stack, project structure, flow diagrams, and future improvements.
+- [x] Commit the proposal.
 
 ## 5. GENERATE IMPLEMENTATION PLAN `.cursor/implementation-plan.md`
 - [ ] Break the project into granular, Conventional-Commit-style steps with testing and documentation tasks.
