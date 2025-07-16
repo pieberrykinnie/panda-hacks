@@ -5,3 +5,4 @@
 2025-07-17 | feat:infra configure Supabase & Fly deploy files – SQL schema, Fly.toml, Terraform IaC created
 2025-07-17 | chore:docker add dev containers – Dockerfile.api, Dockerfile.agent, docker-compose.yml with slim images
 2025-07-17 | fix:agent resolve langchain-openai dependency – added langchain-openai==0.2.14, tests now pass
+2025-07-17 | feat:web implement Supabase Auth (email) – React TypeScript app with Auth UI, login/signup pages
