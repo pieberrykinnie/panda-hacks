@@ -24,10 +24,10 @@
 - [x] Commit the proposal.
 
 ## 5. GENERATE IMPLEMENTATION PLAN `.cursor/implementation-plan.md`
-- [ ] Break the project into granular, Conventional-Commit-style steps with testing and documentation tasks.
-- [ ] Reference `.cursor/logs.md` usage and condensation rules.
-- [ ] Ensure plan culminates in a deployable application, ≤10 docs files, and error-free dev commands.
-- [ ] Commit the implementation plan.
+- [x] Break the project into granular, Conventional-Commit-style steps with testing and documentation tasks.
+- [x] Reference `.cursor/logs.md` usage and condensation rules.
+- [x] Ensure plan culminates in a deployable application, ≤10 docs files, and error-free dev commands.
+- [x] Commit the implementation plan.
 
 ## 6. DEFINE DEVELOPMENT GUIDELINES `.cursorrules`
 - [ ] Research and draft development rules (tools, commands, coding standards, env-management, etc.).
