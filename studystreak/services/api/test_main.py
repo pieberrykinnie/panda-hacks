@@ -66,7 +66,9 @@ def test_auth_me_endpoint_with_mock_user() -> None:
 
 def test_plans_endpoint_with_mock_user() -> None:
     """Test /api/plans endpoint with mocked user authentication."""
-    # Create a mock user
+    from auth import get_current_user
+    from main import PLANS_DB
+    PLANS_DB.clear()
     mock_user = UserInfo(
         id="test-user-id",
         email="test@example.com",
@@ -74,27 +76,34 @@ def test_plans_endpoint_with_mock_user() -> None:
         exp=9999999999,
         sub="test-user-id"
     )
-    
-    # Override the dependency for this test
     def override_get_current_user():
         return mock_user
-    
     app.dependency_overrides[get_current_user] = override_get_current_user
-    
     try:
+        # Add a plan for this user
+        PLANS_DB.append({
+            "id": "plan-1",
+            "user_id": "test-user-id",
+            "title": "Test Plan",
+            "description": "Test Desc",
+            "schedule": {"monday": "study"}
+        })
         response = client.get("/api/plans")
         assert response.status_code == 200
         data = response.json()
-        assert data["user_id"] == "test-user-id"
-        assert "plans" in data
-        assert "message" in data
+        assert isinstance(data, list)
+        assert len(data) == 1
+        assert data[0]["user_id"] == "test-user-id"
+        assert data[0]["title"] == "Test Plan"
     finally:
-        # Clean up the override
         app.dependency_overrides = {}
+        PLANS_DB.clear()
 
 def test_create_plan_endpoint_with_mock_user() -> None:
     """Test POST /api/plans endpoint with mocked user authentication."""
-    # Create a mock user
+    from auth import get_current_user
+    from main import PLANS_DB
+    PLANS_DB.clear()
     mock_user = UserInfo(
         id="test-user-id",
         email="test@example.com",
@@ -102,24 +111,54 @@ def test_create_plan_endpoint_with_mock_user() -> None:
         exp=9999999999,
         sub="test-user-id"
     )
-    
-    # Override the dependency for this test
     def override_get_current_user():
         return mock_user
-    
     app.dependency_overrides[get_current_user] = override_get_current_user
-    
     try:
-        plan_data = {"title": "Test Plan", "description": "Test Description"}
+        plan_data = {"title": "Test Plan", "description": "Test Description", "schedule": {"monday": "study"}}
         response = client.post("/api/plans", json=plan_data)
         assert response.status_code == 200
-        data = response.json()
-        assert data["user_id"] == "test-user-id"
-        assert data["title"] == "Test Plan"
-        assert "message" in data
+        plan = response.json()
+        assert plan["user_id"] == "test-user-id"
+        assert plan["title"] == "Test Plan"
+        assert plan["schedule"] == {"monday": "study"}
     finally:
-        # Clean up the override
         app.dependency_overrides = {}
+        PLANS_DB.clear()
+
+def test_create_and_list_plans_with_mock_user() -> None:
+    """Test creating and listing plans for the authenticated user."""
+    from auth import get_current_user
+    from main import PLANS_DB
+    PLANS_DB.clear()
+    mock_user = UserInfo(
+        id="test-user-id",
+        email="test@example.com",
+        aud="authenticated",
+        exp=9999999999,
+        sub="test-user-id"
+    )
+    def override_get_current_user():
+        return mock_user
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    try:
+        # Create a plan
+        plan_data = {"title": "Math Plan", "description": "Algebra", "schedule": {"monday": "study"}}
+        response = client.post("/api/plans", json=plan_data)
+        assert response.status_code == 200
+        plan = response.json()
+        assert plan["title"] == "Math Plan"
+        assert plan["user_id"] == "test-user-id"
+        # List plans
+        response = client.get("/api/plans")
+        assert response.status_code == 200
+        plans = response.json()
+        assert isinstance(plans, list)
+        assert len(plans) == 1
+        assert plans[0]["title"] == "Math Plan"
+    finally:
+        app.dependency_overrides = {}
+        PLANS_DB.clear()
 
 def test_streaks_endpoint_with_mock_user() -> None:
     """Test /api/streaks endpoint with mocked user authentication."""

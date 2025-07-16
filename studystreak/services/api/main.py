@@ -6,12 +6,13 @@ Provides protected endpoints for study plans and user management.
 """
 
 import os
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 from auth import get_current_user, UserInfo, AuthError
 
@@ -36,6 +37,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# In-memory storage for plans (for initial stub/testing)
+PLANS_DB = []
+
+class PlanCreate(BaseModel):
+    title: str
+    description: str = ""
+    schedule: dict
+
+class PlanOut(BaseModel):
+    id: str
+    user_id: str
+    title: str
+    description: str
+    schedule: dict
 
 @app.get("/health", response_class=JSONResponse)
 def health() -> Dict[str, Any]:
@@ -63,39 +79,33 @@ async def get_current_user_info(user: UserInfo = Depends(get_current_user)) -> D
         "authenticated": True
     }
 
-@app.get("/api/plans", response_class=JSONResponse)
-async def list_user_plans(user: UserInfo = Depends(get_current_user)) -> Dict[str, Any]:
+@app.get("/api/plans", response_model=List[PlanOut])
+async def list_user_plans(user: UserInfo = Depends(get_current_user)) -> List[PlanOut]:
     """
     List study plans for the authenticated user.
-    
-    This is a protected endpoint that requires valid JWT authentication.
-    In the full implementation, this would query the database for user plans.
+    Returns all plans for the current user (in-memory stub).
     """
-    # TODO: Implement database query for user plans
-    return {
-        "plans": [],
-        "user_id": user.id,
-        "message": "Plans endpoint - database integration pending"
-    }
+    return [plan for plan in PLANS_DB if plan["user_id"] == user.id]
 
-@app.post("/api/plans", response_class=JSONResponse)
+@app.post("/api/plans", response_model=PlanOut)
 async def create_plan(
-    plan_data: Dict[str, Any],
+    plan_data: PlanCreate,
     user: UserInfo = Depends(get_current_user)
-) -> Dict[str, Any]:
+) -> PlanOut:
     """
     Create a new study plan for the authenticated user.
-    
-    This is a protected endpoint that requires valid JWT authentication.
-    In the full implementation, this would save the plan to the database.
+    Adds the plan to in-memory storage (stub).
     """
-    # TODO: Implement database save for new plan
-    return {
-        "plan_id": "temp-id",
+    import uuid
+    plan = {
+        "id": str(uuid.uuid4()),
         "user_id": user.id,
-        "title": plan_data.get("title", "Untitled Plan"),
-        "message": "Plan creation - database integration pending"
+        "title": plan_data.title,
+        "description": plan_data.description,
+        "schedule": plan_data.schedule
     }
+    PLANS_DB.append(plan)
+    return plan
 
 @app.get("/api/streaks", response_class=JSONResponse)
 async def get_user_streaks(user: UserInfo = Depends(get_current_user)) -> Dict[str, Any]:
