@@ -13,11 +13,10 @@
 - [x] Commit changes.
 
 ## 3. BRAINSTORM PROJECT IDEA `.cursor/brainstorm.md`
-- [ ] Perform at least 10 distinct web searches (one per iteration) on potential project ideas.
-- [ ] After each search, append findings under a new `## Iteration X` heading in `.cursor/brainstorm.md`.
-- [ ] Ensure at least five feasible winning ideas are documented.
-- [ ] Commit after completing all iterations.
-- [ ] (In progress: Iteration 1 completed)
+- [x] Perform at least 10 distinct web searches (one per iteration) on potential project ideas.
+- [x] After each search, append findings under a new `## Iteration X` heading in `.cursor/brainstorm.md`.
+- [x] Ensure at least five feasible winning ideas are documented.
+- [x] Commit after completing all iterations.
 
 ## 4. FINALIZE PROJECT IDEA `.cursor/proposal.md`
 - [ ] Draft a comprehensive project proposal following hackathon requirements.
