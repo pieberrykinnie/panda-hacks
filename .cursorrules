@@ -1,0 +1,56 @@
+# .cursorrules – Development Guidelines for StudyStreak
+
+## 1. Required Tool Usage
+- Always use `pwd`, `ls -l`, and `tree -L 2` to verify directory structure before and after major file operations.
+- Use `grep`, `rg`, or `fd` for codebase search; avoid manual file-by-file inspection.
+- Use `cat`, `less`, or `bat` for file previews.
+- Use `jq` for JSON manipulation and inspection.
+
+## 2. Package Manager Preferences
+- **JavaScript/TypeScript:** Use `pnpm` for all Node.js package management. Never use `npm` or `yarn`.
+  - Install dependencies: `pnpm install <pkg>`
+  - Add dev dependencies: `pnpm add -D <pkg>`
+  - Remove: `pnpm remove <pkg>`
+- **Python:** Use `uv` for dependency management and virtual environments.
+  - Install: `uv pip install <pkg>`
+  - Lock: `uv pip freeze > requirements.txt`
+  - Never use `pipenv` or `conda`.
+
+## 3. Coding Standards
+- **TypeScript:**
+  - All code must be type-safe. No `any` types except in unavoidable interop.
+  - Use strict mode in `tsconfig.json`.
+  - Prefer interfaces over types for object shapes.
+  - Use JSDoc for all exported functions and classes.
+  - Use `eslint` and `prettier` (enforced in CI).
+- **Python:**
+  - Use type hints everywhere (`mypy` clean).
+  - All public functions/classes must have docstrings (Google or NumPy style).
+  - Use `ruff` for linting and formatting.
+- **General:**
+  - Write small, single-responsibility functions.
+  - All new code must include unit or integration tests.
+
+## 4. Dependency Management
+- Pin all dependencies to exact versions in lockfiles (`pnpm-lock.yaml`, `requirements.txt`).
+- Review and prune unused dependencies monthly.
+- Use Renovate or Dependabot for automated update PRs.
+- Never commit secrets or credentials.
+
+## 5. Documentation Requirements
+- Every package/module must have a `README.md` with usage, setup, and example code.
+- All public APIs must be documented with OpenAPI (FastAPI auto-docs) or JSDoc.
+- Update `.cursor/logs.md` after every commit (see implementation plan).
+- Keep documentation ≤10 files; consolidate where possible.
+
+## 6. Environment Variable Handling
+- Store all secrets and environment variables in `.env.example` (never commit `.env`).
+- Use `dotenv` (Node) and `python-dotenv` (Python) for local development.
+- Document all required env vars in the root `README.md` and `.cursor/setup.md`.
+- Use platform secrets managers (Vercel, Fly.io, Supabase) for production.
+
+## 7. Miscellaneous
+- All commands/scripts must be cross-platform (Linux/macOS, avoid Windows-only syntax).
+- Use Conventional Commits for all commit messages.
+- All code must pass CI before merging.
+- Use feature branches and PRs for all non-trivial changes.
