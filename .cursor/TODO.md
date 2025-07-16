@@ -8,9 +8,9 @@
 - [ ] Commit the file to version control.
 
 ## 2. INGEST HACKATHON DETAILS `.cursor/hackathon.md`
-- [ ] Extract and record all required details (name, problem statements, deliverables, judging criteria, prize categories, judges).
-- [ ] Save them to `.cursor/hackathon.md`.
-- [ ] Commit changes.
+- [x] Extract and record all required details (name, problem statements, deliverables, judging criteria, prize categories, judges).
+- [x] Save them to `.cursor/hackathon.md`.
+- [x] Commit changes.
 
 ## 3. BRAINSTORM PROJECT IDEA `.cursor/brainstorm.md`
 - [ ] Perform at least 10 distinct web searches (one per iteration) on potential project ideas.
