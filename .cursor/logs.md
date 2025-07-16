@@ -7,3 +7,4 @@
 2025-07-17 | fix:agent resolve langchain-openai dependency – added langchain-openai==0.2.14, tests now pass
 2025-07-17 | feat:web implement Supabase Auth (email) – React TypeScript app with Auth UI, login/signup pages
 2025-07-17 | feat:web add protected routes & user state – useAuth hook, ProtectedRoute, Dashboard components
+2025-07-16 | feat:api add JWT validation middleware – all tests pass, Supabase JWT auth is enforced for protected endpoints

@@ -126,6 +126,8 @@ async def verify_jwt_token(token: str) -> UserInfo:
         
         return user_info
         
+    except HTTPException:
+        raise
     except JWTError as e:
         raise HTTPException(
             status_code=401,
