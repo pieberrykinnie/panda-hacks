@@ -1,36 +1,57 @@
 # .cursorrules – StudyStreak Development Guidelines
 
-## Package Manager Preferences
-- Use `pnpm` for all JavaScript/TypeScript projects (web, shared packages).
-- Use `uv` (or pip with requirements.txt) for all Python projects (API, agent, scripts).
-- Never use npm, yarn, or poetry unless explicitly required by a dependency.
+## 1. Terminal and File Navigation
+- On the first edit of a terminal session, and after every `cd` command, always run in order: `pwd`, `ls -l`, and `tree -L 2` to verify and document the current directory structure.
+- Use `grep`, `rg`, or `fd` for codebase search; avoid manual file-by-file inspection.
+
+## 2. Package Manager Preferences
+- **JavaScript/TypeScript:** Always use `pnpm` for all package management. Never use `npm` or `yarn` unless explicitly required by a dependency. Prefer `pnpm init` organically for new projects, never generate full project files in one go.
+- **Python:** Always use `uv` for dependency management and virtual environments. Never use `pip` or `pipenv` unless explicitly required. Prefer `uv init` organically for new projects, never generate full project files in one go.
 - Always commit lockfiles (`pnpm-lock.yaml`, `requirements.txt`).
 
-## Coding Standards
-- TypeScript: Use strict mode, enable all strict type checks, prefer interfaces for public APIs, use `as const` for literals.
-- Python: Use type hints everywhere, enable Ruff and Pyright, require docstrings for all public functions/classes.
-- Enforce Prettier (web) and Ruff (Python) for formatting and linting.
-- Use Conventional Commits for all commit messages.
-- All code must be covered by tests (unit, integration, or e2e as appropriate).
-- No secrets or credentials in code or config files.
+## 3. Coding Standards and Type Safety
+- **TypeScript:**
+  - Use strict mode and enable all strict type checks in `tsconfig.json`.
+  - Never use `any` except for unavoidable interop; always prefer explicit types and interfaces.
+  - Use `as const` for literals and prefer interfaces for public APIs.
+- **Python:**
+  - Use type hints everywhere; all public and non-trivial functions/methods must have type annotations.
+  - All non-trivial functions/methods must have docstrings (Google or NumPy style).
+  - Enable Ruff and Pyright for linting and static analysis.
+- **General:**
+  - Maximum type safety is required: no `any`, no untyped function signatures, no implicit `any` or `object`.
+  - All code must be covered by tests (unit, integration, or e2e as appropriate).
+  - Use Conventional Commits for all commit messages.
 
-## Documentation Requirements
+## 4. Documentation Requirements
 - Every new module, endpoint, or major function must have a docstring or JSDoc comment.
+- All non-trivial functions/methods must have a docstring explaining purpose, parameters, and return values.
 - Update the main README and relevant sub-READMEs for any new feature or breaking change.
 - All environment variables must be documented in `.env.example` and `.cursor/setup.md`.
 - Architecture diagrams and ERDs must be kept up to date in the docs folder.
 
-## Environment Variable Handling
-- All secrets and environment variables must be loaded from `.env` files or the deployment environment.
-- Never hardcode secrets or API keys in source code.
-- Use `.env.example` as a template for all required variables.
-- Validate required environment variables at service startup; fail fast if missing.
-- Document all variables in `.cursor/setup.md` and keep in sync with `.env.example`.
-
-## Miscellaneous
-- Use Docker for local development and CI parity.
-- All services must expose a `/health` endpoint for readiness/liveness checks.
-- Log all significant changes in `.cursor/logs.md` after each commit.
+## 5. Dependency and Library Management
+- Never generate or scaffold full project files in one go; always use `pnpm init` or `uv init` organically as needed.
+- Before introducing any new library or dependency, perform a web search to check for best practices, security issues, and alternatives. Document rationale in the PR or commit message.
 - Keep all dependencies up to date and remove unused packages regularly.
 - Prefer explicit imports and avoid wildcard imports.
 - Use path aliases for shared packages in monorepo.
+
+## 6. Authentication, Credentials, and Secrets Handling
+- Never commit secrets, credentials, or API keys to the codebase or config files.
+- All authentication tokens, credentials, and secrets must be loaded from environment variables or platform secrets managers (e.g., Vercel, Fly.io, Supabase dashboard).
+- Document all required secrets and credentials in `.env.example` and `.cursor/setup.md`.
+- Validate required environment variables at service startup; fail fast if missing.
+
+## 7. Environment Variable Management
+- `.env.example` must be committed and kept up to date with all required variables for every service; `.env` is for local use only and must never be committed.
+- Always keep `.env.example` and `.cursor/setup.md` in sync.
+- Never hardcode secrets or API keys in source code.
+- Use `python-dotenv` or equivalent for local development.
+
+## 8. Miscellaneous
+- Use Docker for local development and CI parity.
+- All services must expose a `/health` endpoint for readiness/liveness checks.
+- Log all significant changes in `.cursor/logs.md` after each commit.
+- All code must pass CI before merging.
+- Use feature branches and PRs for all non-trivial changes.
